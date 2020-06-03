@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script>
+        document.addEventListener("DOMContentLoaded",() => {
+            // Getting data from local storage such as username and channels
+            if(!localStorage.getItem('username'))
+            
+            localStorage.setItem('username',`{{ username | safe }}`);
+            
+            if(!localStorage.getItem('channels')){
+            var channels = new Array("bot");
+            localStorage.setItem('channels',JSON.stringify(channels));
+            
+            }
+            else{
+            var channels = JSON.parse(localStorage.getItem('channels'));
+            console.log("Channels got from local Storage");
+            }
+            console.log(channels);
+            
+            const ul = document.querySelector("#names");
+            // To display results fetched from local storage
+            for(i =0 ; i<= channels.length -1;i++){
+            console.log(channels[i]);
+            channel_name = channels[i];
+            const li = document.createElement("li");
+            //channel_link = `url_for("channel", channel_name = ${channel_name})`;
+            const a = document.createElement("a");
+            a.href= `{{ url_for('channel', channel_name = '${channel_name}') }}` ;
+            a.innerHTML=channel_name;
+            //li.innerHTML = `<a href =  {{ '${channel_link}' }} >${channels[i]}</a>`;
+            li.appendChild(a);
+            
+            ul.append(li);
+            };
+            // Whenever a channel is being created
+            document.querySelector("#form").onsubmit = () => {
+               let channel_name = JSON.parse(document.querySelector("#channel_name").value);  
+               channels.push(String(channel_name));
+               
+               localStorage.setItem("channels",JSON.stringify(channels));
+               const li = document.createElement("li");
+                
+                const a = document.createElement("a");
+                a.href= `{{ url_for('channel', channel_name = '${channel_name}') }}` ;
+                a.innerText= channel_name;  
+                li.appendChild(a);
+                
+                ul.append(li);
+            
+               
+             };
+        });
+
+    </script>
+    <title>Main Menu</title>
+</head>
+<body>
+    <div class = "container">
+        <h1>Channels</h1>
+        <ul id ="names">
+        </ul>
+        <hr>
+        <h3>Want to create a new channel</h3>
+        <form id = "form">
+            <p>Enter Channel name</p>
+            <input type="text" name = "channel name" id ='channel_name'>
+            <button class = 'btn btn-primary' id = "create"> Submit</button>
+        </form>
+    </div>
+</body>
+</html>

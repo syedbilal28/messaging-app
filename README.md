@@ -1,2 +1,3 @@
-# messaging-app
-A python messaging app to broadcast messages over different channels.
+# Project 2
+
+Web Programming with Python and JavaScript

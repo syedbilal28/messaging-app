@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+    document.addEventListener("DOMContentLoaded",() =>{
+        var messages = [];
+        if(!localStorage.getItem('messages'))
+        localStorage.setItem('messages',messages);
+        var socket= io.connect(location.protocol + "//"+ document.domain +":"+ location.port);
+        const ul = document.getElementById("#messages");
+        for (i=0,i<= messages.length -1;i++){
+            const li = document.createElement('li');
+            li.innerHTML= messages[i];
+            ul.appendChild(li);
+            };
+
+
+        document.querySelector("#send").onClick = () => {
+            var message = document.querySelector('message').innerHTML;
+            messages.push(message);
+
+    localStorage.setItem('messages',messages)
+
+    socket.emit("Send message", {'message' :message});
+    };
+    };
+});
+    </script>
+    <title>{{ channel_name }}</title>
+</head>
+<body>
+    <div class = "container">
+        <div class = "message box">
+            <ul id = "messages">
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div id = "chatbox">
+            <input name = "message" type = "text">
+            <button class = "btn btn-primary" id = "send">Send</button>
+        </div>
+    </div>
+    
+</body>
+</html>
