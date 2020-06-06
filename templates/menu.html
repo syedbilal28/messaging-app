@@ -22,40 +22,31 @@
             }
             console.log(channels);
             
-            const ul = document.querySelector("#names");
+            
             // To display results fetched from local storage
             for(i =0 ; i<= channels.length -1;i++){
             console.log(channels[i]);
-            channel_name = channels[i];
-            const li = document.createElement("li");
-            //channel_link = `url_for("channel", channel_name = ${channel_name})`;
-            const a = document.createElement("a");
-            a.href= `{{ url_for('channel', channel_name = '${channel_name}') }}` ;
-            a.innerHTML=channel_name;
-            //li.innerHTML = `<a href =  {{ '${channel_link}' }} >${channels[i]}</a>`;
-            li.appendChild(a);
-            
-            ul.append(li);
+            var channel_name = channels[i];
+            enter_channel(channel_name);
             };
             // Whenever a channel is being created
             document.querySelector("#form").onsubmit = () => {
-               let channel_name = JSON.parse(document.querySelector("#channel_name").value);  
-               channels.push(String(channel_name));
-               
-               localStorage.setItem("channels",JSON.stringify(channels));
-               const li = document.createElement("li");
-                
-                const a = document.createElement("a");
-                a.href= `{{ url_for('channel', channel_name = '${channel_name}') }}` ;
-                a.innerText= channel_name;  
-                li.appendChild(a);
-                
-                ul.append(li);
-            
-               
+                channel_name = (document.querySelector("#channel_name").value);
+                enter_channel(channel_name);
+                channels.push(channel_name);
+                localStorage.setItem('channels',JSON.stringify(channels));
              };
         });
-
+        function enter_channel (channel_name) {
+            const ul = document.querySelector("#names");
+            const li = document.createElement("li");
+            
+            const a = document.createElement("a");
+            a.href= `{{ url_for('channel', channel_name = '${channel_name}') }}` ;
+            a.innerHTML=channel_name;
+            li.appendChild(a);
+            ul.append(li);
+        }
     </script>
     <title>Main Menu</title>
 </head>

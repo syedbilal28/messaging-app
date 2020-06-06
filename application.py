@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 Session(app)
-
+conversation = {"message":""}
 username =None
 @app.route("/")
 def index():
@@ -31,6 +31,8 @@ def channel(channel_name):
 @socketio.on('Send message')
 def send(data):
     message = data['message']
+    print(message)
+
     emit('message sent',message,broadcast=True)
 
 
