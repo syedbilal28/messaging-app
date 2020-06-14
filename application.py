@@ -34,7 +34,12 @@ def send(data):
     print(message)
 
     emit('message sent',message,broadcast=True)
-
+@socketio.on("create channel")
+def create(data):
+    channel_name = data['channel_name']
+    infile = open(str(channel_name)+".txt","w")
+    infile.close()
+    
 
 
 if __name__ == "__main__":
