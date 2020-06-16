@@ -23,7 +23,7 @@
             }
             console.log(channels);
             
-            var socket=(location.protocol+ "//"  + document.domain + ":" + location.port);
+            var socket=io.connect(location.protocol+ "//"  + document.domain + ":" + location.port);
             // To display results fetched from local storage
             for(i =0 ; i<= channels.length -1;i++){
             console.log(channels[i]);
@@ -47,7 +47,7 @@
             const li = document.createElement("li");
             
             const a = document.createElement("a");
-            a.href= `{{ url_for('channel', channel_name = '${channel_name}') }}` ;
+            a.href= "{{ url_for('channel', channel_name = 'channelName') }}".replace("channelName",channel_name) ;
             a.innerHTML=channel_name;
             li.appendChild(a);
             ul.append(li);

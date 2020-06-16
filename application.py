@@ -25,9 +25,15 @@ def login():
         username = request.form.get("username")
     return render_template("menu.html" , username=username)
 
-@app.route("/login/<channel_name>")
+@app.route("/channel/<channel_name>")
 def channel(channel_name):
-    return render_template("chatroom.html",channel_name= channel_name)
+    print(channel_name)
+    infile = open(str(channel_name)+".txt","a")
+    try:
+        content= infile.readlines()
+    except:
+        content= []
+    return render_template("chatroom.html",channel_name= channel_name,messages= content)
 @socketio.on('Send message')
 def send(data):
     message = data['message']
