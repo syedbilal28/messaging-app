@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask,render_template,request,redirect
+from flask import Flask,render_template,request,redirect,json
 from flask_socketio import SocketIO, emit
 from flask_session import Session
 
@@ -27,14 +27,26 @@ def login():
 
 @app.route("/login/<channel_name>")
 def channel(channel_name):
-    return render_template("chatroom.html",channel_name= channel_name)
+    print("channel_name")
+    infile = open(str(channel_name)+".txt","r")
+    content= infile.readlines()
+    infile.close()
+    return render_template("chatroom.html",channel_name= channel_name,messages = json.dump(content))
 @socketio.on('Send message')
 def send(data):
     message = data['message']
+    channel_name = data['channel_name']
     print(message)
-
+    infile = open(str(channel_name)+".txt","a")
+    infile.write(message)
+    infile.close()
     emit('message sent',message,broadcast=True)
-
+@socketio.on("create channel")
+def create(data):
+    channel_name = data["channel_name"]
+    infile = open(str(channel_name)+".txt","w")
+    infile.close()
+    print ("channel {} created".format(channel_name))
 
 
 if __name__ == "__main__":

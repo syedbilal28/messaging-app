@@ -6,16 +6,20 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
     <script>
     document.addEventListener("DOMContentLoaded",() =>{
-        var messages = new Array() ; 
-        if(!localStorage.getItem('messages')){
-        localStorage.setItem('messages',JSON.stringify(messages));
+        var messages = JSON.parse("{{ messages | safe }}");
+        if (messages.length ==0) {
+        var messages = new Array() ;
         }
-        if(localStorage.getItem('messages').length <= 2){
-        localStorage.setItem('messages',JSON.stringify(messages));
-        }
-        else {
-            messages = JSON.parse(localStorage.getItem('messages'));
-        }
+        console.log(messages); 
+        // if(!localStorage.getItem('messages')){
+        // localStorage.setItem('messages',JSON.stringify(messages));
+        // }
+        // if(localStorage.getItem('messages').length <= 2){
+        // localStorage.setItem('messages',JSON.stringify(messages));
+        // }
+        // else {
+        //     messages = JSON.parse(localStorage.getItem('messages'));
+        // }
     
         var socket= io.connect(location.protocol + "//"+ document.domain +":"+ location.port);
         const ul = document.querySelector("#messages");
@@ -29,7 +33,7 @@
         socket.on('connect', () => {
             document.querySelector("#send").onclick = () => {
                 message = document.querySelector("input").value;
-                socket.emit('Send message',{'message': message});
+                socket.emit('Send message',{'message': message, "channel_name": "{{ channel_name | safe }}" });
             };
         socket.on('message sent', data => {
             const ul = document.querySelector("#messages");
