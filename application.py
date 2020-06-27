@@ -28,11 +28,11 @@ def login():
 @app.route("/channel/<channel_name>")
 def channel(channel_name):
     print(channel_name)
-    infile = open(str(channel_name)+".txt","a")
-    try:
-        content= infile.readlines()
-    except:
-        content= []
+    infile = open(str(channel_name)+".txt","r")
+    
+    content= infile.readlines()
+    print("messages in file are",content)
+    
     return render_template("chatroom.html",channel_name= channel_name,messages= content)
 @socketio.on('Send message')
 def send(data):
@@ -40,7 +40,8 @@ def send(data):
     channel_name = data['channel_name']
     print(message)
     infile = open(str(channel_name)+".txt","a")
-    infile.write(message)
+    
+    infile.write("\n"+message)
     infile.close()
     emit('message sent',message,broadcast=True)
 @socketio.on("create channel")

@@ -6,27 +6,15 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
     <script>
     document.addEventListener("DOMContentLoaded",() =>{
-        var messages = JSON.parse("{{ messages | safe }}");
-        if (messages.length ==0) {
-        var messages = new Array() ;
-        }
-        console.log(messages); 
-        // if(!localStorage.getItem('messages')){
-        // localStorage.setItem('messages',JSON.stringify(messages));
-        // }
-        // if(localStorage.getItem('messages').length <= 2){
-        // localStorage.setItem('messages',JSON.stringify(messages));
-        // }
-        // else {
-        //     messages = JSON.parse(localStorage.getItem('messages'));
-        // }
-    
+        var messages = ({{ messages | safe }} );
+        
+        localStorage.setItem('messages',messages);
+        console.log(messages);
+          
         var socket= io.connect(location.protocol + "//"+ document.domain +":"+ location.port);
-        const ul = document.querySelector("#messages");
+        // const ul = document.getElementById("messages");
         for (i=0;i<= messages.length -1;i++) {
-            const li = document.createElement('li');
-            li.innerHTML= messages[i];
-            ul.append(li);
+            print_message(messages[i]);
             };
 
 
@@ -36,11 +24,8 @@
                 socket.emit('Send message',{'message': message, "channel_name": "{{ channel_name | safe }}" });
             };
         socket.on('message sent', data => {
-            const ul = document.querySelector("#messages");
-            const li = document.createElement("li");
-            li.innerHTML = data;
-            console.log(messages);
-            ul.append(li);
+            
+            print_message(data);
             messages.push(data);
             localStorage.setItem('messages',JSON.stringify(messages));
         });
@@ -49,6 +34,17 @@
     
     
     });
+    function print_message(message){
+        const ul = document.getElementById("messages");
+        const li = document.createElement("li");
+        const p= document.createElement("p");
+        // p.innerText= message;
+        // p.innerHTML=message;
+        // li.appendChild=p;
+        li.innerHTML=message;
+        ul.append(li);
+        
+    }
     </script>
     <title>{{ channel_name }}</title>
 </head>
