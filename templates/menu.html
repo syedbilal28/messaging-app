@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-    
     <script>
         document.addEventListener("DOMContentLoaded",() => {
             // Getting data from local storage such as username and channels
@@ -24,7 +23,9 @@
             }
             console.log(channels);
             
-            var socket = io.connect(location.protocol+"//"+document.domain+":"+location.port);
+
+            var socket=io.connect(location.protocol+ "//"  + document.domain + ":" + location.port);
+
             // To display results fetched from local storage
             for(i =0 ; i<= channels.length -1;i++){
             console.log(channels[i]);
@@ -32,13 +33,17 @@
             enter_channel(channel_name);
             };
             // Whenever a channel is being created
-            socket.on('connect' , () => {
+
+            socket.on('connect', () => {
+
                 document.querySelector("#form").onsubmit = () => {
                     channel_name = (document.querySelector("#channel_name").value);
                     enter_channel(channel_name);
                     channels.push(channel_name);
                     localStorage.setItem('channels',JSON.stringify(channels));
-                    socket.emit("create channel",{"channel_name":channel_name});
+
+                    socket.emit('create channel', {"channel_name": channel_name});
+
              };
             });
             
@@ -48,7 +53,7 @@
             const li = document.createElement("li");
             
             const a = document.createElement("a");
-            a.href= `{{ url_for('channel', channel_name = {{% raw %}} '${channel_name}' {{% endraw %}} ) }}` ;
+            a.href= "{{ url_for('channel', channel_name = 'channelName') }}".replace("channelName",channel_name) ;
             a.innerHTML=channel_name;
             li.appendChild(a);
             ul.append(li);
