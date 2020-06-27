@@ -27,13 +27,6 @@ def login():
 
 @app.route("/channel/<channel_name>")
 def channel(channel_name):
-<<<<<<< HEAD
-    print("channel_name")
-    infile = open(str(channel_name)+".txt","r")
-    content= infile.readlines()
-    infile.close()
-    return render_template("chatroom.html",channel_name= channel_name,messages = json.dump(content))
-=======
     print(channel_name)
     infile = open(str(channel_name)+".txt","a")
     try:
@@ -41,7 +34,6 @@ def channel(channel_name):
     except:
         content= []
     return render_template("chatroom.html",channel_name= channel_name,messages= content)
->>>>>>> 6493cd9b81a7485012052f841a7d53f1942b500c
 @socketio.on('Send message')
 def send(data):
     message = data['message']
@@ -53,17 +45,10 @@ def send(data):
     emit('message sent',message,broadcast=True)
 @socketio.on("create channel")
 def create(data):
-<<<<<<< HEAD
-    channel_name = data["channel_name"]
-    infile = open(str(channel_name)+".txt","w")
-    infile.close()
-    print ("channel {} created".format(channel_name))
-=======
     channel_name = data['channel_name']
     infile = open(str(channel_name)+".txt","w")
     infile.close()
     
->>>>>>> 6493cd9b81a7485012052f841a7d53f1942b500c
 
 
 if __name__ == "__main__":
