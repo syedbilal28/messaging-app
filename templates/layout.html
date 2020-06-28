@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static',filename = 'index.css' ) }}">
+    {% block stylesheet %}
+    {% endblock %}
+    <script>
+        
+    function withoutUserName () {
+             if (!localStorage.getItem("username")){
+            alert("You have not given a username");
+         };
+    }
+    function alreadyonpage() {
+        alert("You are already on the home page")
+
+    }
+    </script>
+    
+    {% block javascript %}
+    {% endblock %}
+    
+    {% block title %}
+    <title>Slack | Home</title>
+    {% endblock %}
+</head>
+<body>
+    <div id = "main-nav">
+        <h2>Flack</h2>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="{{ url_for('login') }}" method="get" id="main" onclick="withoutUserName()">Main Menu</a></li>
+            <li><a href="#">Log out</a></li>
+
+        </ul>
+    </div>
+    {% block body %}
+    {% endblock %}
+    
+</body>
+</html>

@@ -3,7 +3,7 @@ import os
 from flask import Flask,render_template,request,redirect,json
 from flask_socketio import SocketIO, emit
 from flask_session import Session
-
+import pickle
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
@@ -18,12 +18,16 @@ def index():
 
     return render_template("index.html")
 
-@app.route("/login", methods = ["POST","GET"])
+@app.route("/channel", methods = ["POST","GET"])
 def login():
     global username
-    if username== None:
-        username = request.form.get("username")
-    return render_template("menu.html" , username=username)
+    if request.method == "GET":
+        if username == None: 
+            return redirect("/")
+    else:
+        if username== None:
+            username = request.form.get("username")
+        return render_template("menu.html" , username=username)
 
 @app.route("/channel/<channel_name>")
 def channel(channel_name):
